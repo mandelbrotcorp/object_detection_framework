@@ -1,5 +1,5 @@
 import os
-
+from ssd.data.datasets.dataset_class_names import dataset_classes
 
 class DatasetCatalog:
     DATA_DIR = 'datasets'
@@ -52,6 +52,14 @@ class DatasetCatalog:
             "data_dir": "val2014",
             "ann_file": "annotations/instances_val2014.json"
         },
+        'bdd_2020_train': {
+            "data_dir": "images/train",
+            "ann_file": "annotations/instances_train2020.json"
+        },
+        'bdd_2020_val': {
+            "data_dir": "images/val",
+            "ann_file": "annotations/instances_val2020.json"
+        },
     }
 
     @staticmethod
@@ -67,7 +75,7 @@ class DatasetCatalog:
                 split=attrs["split"],
             )
             return dict(factory="VOCDataset", args=args)
-        elif "coco" in name:
+        elif (name in dataset for dataset in dataset_classes):
             coco_root = DatasetCatalog.DATA_DIR
             if 'COCO_ROOT' in os.environ:
                 coco_root = os.environ['COCO_ROOT']
