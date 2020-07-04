@@ -12,6 +12,7 @@ import argparse
 import numpy as np
 
 from ssd.data.transforms import build_transforms
+from ssd.data.datasets.dataset_class_names import dataset_classes
 from ssd.modeling.detector import build_detection_model
 from ssd.utils import mkdir
 from ssd.utils.checkpoint import CheckPointer
@@ -19,11 +20,9 @@ from ssd.utils.checkpoint import CheckPointer
 
 @torch.no_grad()
 def run_demo(cfg, ckpt, score_threshold, images_dir, output_dir, dataset_type):
-    if dataset_type == "voc":
-        class_names = VOCDataset.class_names
-    elif dataset_type == 'coco':
-        class_names = COCODataset.class_names
-    else:
+    try:
+        class_names = dataset_classes['dataset_type']
+    except:
         raise NotImplementedError('Not implemented now.')
     device = torch.device(cfg.MODEL.DEVICE)
 
